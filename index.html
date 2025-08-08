@@ -1,0 +1,1274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="utf-8" /&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</p>
+<p class="p1">&lt;title&gt;NFL Fantasy Lineup Generator &amp; Live Draft Assistant&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>:root{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg:#f7f8fa;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--panel:#ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--text:#111;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--muted:#667085;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--primary:#0a7cff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--ok:#1a9f31;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--warn:#ff9f0a;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bad:#e5484d;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--chip:#eef2f7;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--border:#e5e7eb;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--focus:#94c6ff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>*{box-sizing:border-box}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>html,body{height:100%}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>margin:0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Inter,Arial,sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>color:var(--text);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background:var(--bg);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>line-height:1.35;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>header{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>position:sticky; top:0; z-index:10;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background:var(--panel); border-bottom:1px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wrap{max-width:1280px;margin:0 auto;padding:12px 16px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.titlebar{display:flex;align-items:center;gap:12px;justify-content:space-between}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.titlebar h1{font-size:20px;margin:0}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.row{display:flex;gap:8px;flex-wrap:wrap}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>button,.btn{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>appearance:none;border:1px solid var(--border);background:#fff;color:var(--text);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn.primary{background:var(--primary);border-color:var(--primary);color:white}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn.ghost{background:transparent}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn.sm{padding:4px 8px;font-size:12px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn:focus{outline:3px solid var(--focus);outline-offset:1px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.grid{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display:grid;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>grid-template-columns: 360px 1fr;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>gap:16px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding:16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@media (max-width: 980px){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.grid{grid-template-columns:1fr}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.panel{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h2{margin:6px 0 10px; font-size:16px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h3{margin:10px 0 6px; font-size:14px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>label{font-size:14px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>input,select,textarea{width:100%;padding:8px;border:1px solid var(--border);border-radius:8px;background:white}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>input[type="checkbox"], input[type="radio"]{width:auto}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>input[type="range"]{width:100%}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>small, .muted{color:var(--muted)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.helper{display:block;font-size:12px;color:var(--muted);margin-top:4px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tabbtn{padding:8px 10px;border:1px solid var(--border);border-radius:999px;background:#fff;cursor:pointer;font-weight:600}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tabbtn.active{background:var(--primary);color:#fff;border-color:var(--primary)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.section{display:none}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.section.active{display:block}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.twocol{display:grid;grid-template-columns:1fr 1fr;gap:10px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chips{display:flex;gap:6px;flex-wrap:wrap}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chip{display:inline-flex;gap:6px;align-items:center;background:var(--chip);border:1px solid var(--border);padding:4px 8px;border-radius:999px;font-size:12px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.kpi .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.list{display:grid;gap:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.item{border:1px solid var(--border);border-radius:10px;padding:10px;background:#fff;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.badges{display:flex;gap:6px;flex-wrap:wrap}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.badge{font-size:11px;background:var(--chip);border:1px solid var(--border);padding:2px 6px;border-radius:6px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pos-QB{background:#e6f7ff}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pos-RB{background:#e9ffe6}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pos-WR{background:#fff3e6}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pos-TE{background:#f5e6ff}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pos-K{background:#fffbe6}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pos-DST{background:#e6fff8}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.scorebar, .probbar{height:8px;border-radius:999px;background:#f0f2f5;overflow:hidden}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.scorebar span{display:block;height:8px;background:var(--ok)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.probbar span{display:block;height:8px;background:var(--primary)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>details{background:#f9fafb;border:1px dashed var(--border);padding:8px;border-radius:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.scarcity{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.scar{border:1px solid var(--border);border-radius:8px;padding:8px;background:#fff}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.scar .bar{height:8px;background:#eef2f7;border-radius:999px;overflow:hidden}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.scar .bar span{display:block;height:8px;background:var(--warn)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>table{width:100%;border-collapse:collapse}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>th,td{border-bottom:1px solid var(--border);text-align:left;padding:6px;font-size:13px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.toast{position:fixed;right:12px;bottom:12px;z-index:100;background:#111;color:#fff;padding:10px 12px;border-radius:10px;opacity:.95}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.rowgap{display:grid;gap:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.inline{display:flex;align-items:center;gap:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.rightcol .panel{margin-bottom:12px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.notice{padding:8px;background:#fff8e6;border:1px solid #ffe2a8;border-radius:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pill{padding:2px 8px;border-radius:999px;background:#eef2f7;border:1px solid var(--border);font-size:12px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.alert{padding:4px 8px;border-radius:6px;background:#fff0f0;border:1px solid #ffd0d0;color:#a11}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.lock{cursor:pointer}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.hl{background:#f0f7ff}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.divider{height:1px;background:var(--border);margin:8px 0}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sr-only{position:absolute;left:-9999px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tip{font-size:12px;color:var(--muted);margin:6px 0}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1">&lt;header&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="wrap titlebar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Fantasy Lineup Generator &amp; Live Draft Assistant&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn" id="howBtn" aria-controls="how" aria-expanded="false"&gt;How this works&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn" id="saveBtn" title="Save to browser storage"&gt;Save State&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn" id="loadBtn" title="Load from browser storage"&gt;Load State&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn" id="resetSeedBtn" title="Reset to seed data"&gt;Reset to seed data&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn bad" id="hardResetBtn" title="Clear everything"&gt;Quick Reset&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;main class="wrap grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- LEFT COLUMN --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="panel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tabs" role="tablist" aria-label="Main"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="tabbtn active" data-tab="settings" role="tab" aria-selected="true"&gt;Settings&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="tabbtn" data-tab="generate" role="tab" aria-selected="false"&gt;Generate Plan&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="tabbtn" data-tab="live" role="tab" aria-selected="false"&gt;Live Draft&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- SETTINGS --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;section id="settings" class="section active" role="tabpanel" aria-labelledby="Settings"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Draft Strategy&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="tip"&gt;Choose the style of team you want. These options guide how players are ranked.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rowgap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="twocol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;fieldset&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;legend class="sr-only"&gt;Strategy style&lt;/legend&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Prefer steady weekly points"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="floor" /&gt; High floor</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Safe and consistent. Fewer bad weeks.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Chase big weekly ceilings"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="upside" /&gt; High upside</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Boom potential. Riskier but higher ceiling.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Willing to draft first-year NFL players"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="rookieTol" /&gt; Rookie tolerance</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Rookies can break out but are less predictable.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Comfort drafting players with past injuries"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="injTol" /&gt; Injury risk tolerance</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;More willing to draft players with injury history.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Pair your QB with a receiver on the same team"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="stack" /&gt; Stack QB with WR/TE</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Touchdowns count twice for your lineup when the stack hits.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Wait on running backs until later"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="zeroRB" /&gt; Zero RB</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Load up on WR/TE early. Grab RBs later.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Take one elite RB early then wait"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="heroRB" /&gt; Hero RB</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Anchor with one top RB then focus elsewhere.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Wait to draft a quarterback"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="lateQB" /&gt; Late QB</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Prioritize other positions in early rounds.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label title="Keep the roster balanced by position"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" class="strat" value="balanced" checked/&gt; Balanced</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Even spread of talent across positions.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/fieldset&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;fieldset&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;legend&gt;Strategy sliders&lt;/legend&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label&gt;Floor weight</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="range" id="floorRange" min="0" max="2" step="0.1" value="1" aria-describedby="floorHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small id="floorHelp" class="helper"&gt;Higher prefers consistent players over risky ones.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label&gt;Upside weight</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="range" id="upsideRange" min="0" max="2" step="0.1" value="1" aria-describedby="upsideHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small id="upsideHelp" class="helper"&gt;Higher prefers players who can spike big weeks.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label&gt;Rookie weight</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="range" id="rookieRange" min="0" max="2" step="0.1" value="1" aria-describedby="rookieHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small id="rookieHelp" class="helper"&gt;Higher increases rookie suggestions.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/fieldset&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;League Settings&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;Match these to your league. The draft math and recommendations use these values.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="twocol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;Number of teams</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;input id="numTeams" type="number" min="2" max="20" value="12" aria-describedby="teamsHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="teamsHelp" class="helper"&gt;Total teams in your league. Commonly 10 or 12.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;Your draft position</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;input id="myPos" type="number" min="1" max="12" value="6" aria-describedby="posHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="posHelp" class="helper"&gt;Your pick number in round 1. 1 is first overall.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;Draft type</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;select id="draftType" aria-describedby="typeHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;option&gt;Snake&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;option&gt;Linear&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="typeHelp" class="helper"&gt;Snake reverses order each round. Linear repeats the same order.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;Rounds</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;input id="numRounds" type="number" min="8" max="24" value="16" aria-describedby="roundsHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="roundsHelp" class="helper"&gt;Total draft rounds. Usually starters plus bench.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3&gt;Roster&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;How many starters you must field at each position. FLEX can be RB or WR or TE.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="twocol" id="rosterCfg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;QB &lt;input type="number" min="0" max="3" value="1" data-pos="QB" aria-describedby="qbHelp"&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="qbHelp" class="helper"&gt;Quarterback - the passer who leads your offense.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;RB &lt;input type="number" min="0" max="6" value="2" data-pos="RB" aria-describedby="rbHelp"&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="rbHelp" class="helper"&gt;Running back - rushes and catches short passes.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;WR &lt;input type="number" min="0" max="6" value="3" data-pos="WR" aria-describedby="wrHelp"&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="wrHelp" class="helper"&gt;Wide receiver - primary pass catcher.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;TE &lt;input type="number" min="0" max="3" value="1" data-pos="TE" aria-describedby="teHelp"&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="teHelp" class="helper"&gt;Tight end - pass catcher who also blocks.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;FLEX &lt;input type="number" min="0" max="4" value="1" data-pos="FLEX" aria-describedby="flexHelp"&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="flexHelp" class="helper"&gt;Any RB or WR or TE. Adds lineup flexibility.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;K &lt;input type="number" min="0" max="2" value="1" data-pos="K" aria-describedby="kHelp"&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="kHelp" class="helper"&gt;Kicker - scores on field goals and extra points.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;DST &lt;input type="number" min="0" max="2" value="1" data-pos="DST" aria-describedby="dstHelp"&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="dstHelp" class="helper"&gt;Defense and special teams - your team's defense unit.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;Bench &lt;input type="number" min="0" max="12" value="6" data-pos="BENCH" aria-describedby="benchHelp"&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="benchHelp" class="helper"&gt;Extra players for depth. They do not score unless started.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Scoring&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;These settings describe how points are awarded. If you are new, pick a preset.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="twocol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;Preset</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;select id="scoringPreset" aria-describedby="scoringPresetHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;option value="standard"&gt;Standard&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;option value="half"&gt;Half PPR&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;option value="ppr" selected&gt;PPR&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="inline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="pill"&gt;Edit weights below&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;small id="scoringPresetHelp" class="helper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>Standard gives no points per catch. Half PPR gives 0.5 per catch. PPR gives 1 per catch.</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="rowgap" style="margin-top:6px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;table id="scoringTable" aria-label="Scoring weights"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Stat&lt;/th&gt;&lt;th&gt;Weight&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;Passing Yards / pt &lt;small class="muted"&gt;How many yards equal 1 point&lt;/small&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;&lt;input type="number" step="1" id="passYdsPerPt" value="25"&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;Pass TD &lt;small class="muted"&gt;Points for a passing touchdown&lt;/small&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;&lt;input type="number" step="0.1" id="passTD" value="4"&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;Interception &lt;small class="muted"&gt;Points lost for throwing a pick&lt;/small&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;&lt;input type="number" step="0.1" id="int" value="-2"&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;Rushing Yards / pt &lt;small class="muted"&gt;Yards run per point&lt;/small&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;&lt;input type="number" step="1" id="rushYdsPerPt" value="10"&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;Rush TD &lt;small class="muted"&gt;Points for a rushing touchdown&lt;/small&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;&lt;input type="number" step="0.1" id="rushTD" value="6"&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;Receiving Yards / pt &lt;small class="muted"&gt;Yards caught per point&lt;/small&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;&lt;input type="number" step="1" id="recYdsPerPt" value="10"&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;Reception &lt;small class="muted"&gt;Points per catch - key to PPR formats&lt;/small&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;&lt;input type="number" step="0.1" id="rec" value="1"&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;Fumble &lt;small class="muted"&gt;Points lost for losing the ball&lt;/small&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td&gt;&lt;input type="number" step="0.1" id="fumble" value="-2"&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small class="muted"&gt;Projected points in the dataset are already per scoring preset. You can still tweak weights for your personal preference.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Player Data&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;You can paste a CSV to replace the built-in list. Not required for first-time use.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;summary&gt;CSV Import helper and example&lt;/summary&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="rowgap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p&gt;Paste CSV below, then click Import CSV. Existing dataset will be replaced.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;pre aria-label="CSV header example"&gt;&lt;code&gt;name,team,position,byeWeek,projectedPoints,ADP,tier&lt;/code&gt;&lt;/pre&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="muted"&gt;ADP is average draft position - lower means earlier pick. Tier is a letter grade like S, A, B.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;textarea id="csvInput" rows="6" placeholder="Paste player CSV here..."&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;small class="helper"&gt;Import will validate each row and tell you which line has an issue if it fails.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="row" style="margin-top:6px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn" id="importCsvBtn" title="Replace the player pool with your CSV"&gt;Import CSV&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn" id="exportCsvSeedBtn" title="Download current players as CSV"&gt;Export current players CSV&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn" id="exportJsonBtn" title="Download your current plan as JSON"&gt;Export Plan (JSON)&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3&gt;Advanced&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="twocol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;Availability sigma</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;input id="sigma" type="number" min="4" max="30" value="12" aria-describedby="sigmaHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="sigmaHelp" class="helper"&gt;Controls uncertainty around ADP. Higher values mean more randomness in when players get drafted.&lt;/small&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;Snipe risk threshold %</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;input id="snipeThresh" type="number" min="1" max="99" value="30" aria-describedby="snipeHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;small id="snipeHelp" class="helper"&gt;Warn me if a player's chance to be available at my next pick falls below this percentage.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn primary" id="generateBtn" title="Build a pick list and lineup plan"&gt;Generate Plan&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;small class="helper"&gt;You do not need to import data first. The app ships with a seed dataset.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- GENERATE --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;section id="generate" class="section" role="tabpanel" aria-labelledby="Generate"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rowgap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;My Picks by Round&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="notice"&gt;This table shows where you pick each round based on snake logic. Current round and next pick update during Live Draft.&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;table id="picksTable" aria-label="My picks table"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Round&lt;/th&gt;&lt;th&gt;My pick&lt;/th&gt;&lt;th&gt;Overall&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;tbody&gt;&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/table&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Recommended Next Pick&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;This is the top suggestion after balancing points, position needs, tiers, and chance the player is still on the board.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id="nextPick" class="panel"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Top 10 Alternatives&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;Backups if your top choice gets taken. You can lock a player to keep them in the plan.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id="topAlt" class="list"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Full Lineup Plan&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;Suggested picks across all rounds. Each entry lists a short reason and the player's basics.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id="lineupPlan" class="list"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- LIVE --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;section id="live" class="section" role="tabpanel" aria-labelledby="Live"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rowgap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="twocol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;h2&gt;Add Live Pick&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="tip"&gt;Log players as they are drafted. The tool removes them from your pool and reranks.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label&gt;Quick add by name</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input id="liveSearch" type="text" placeholder="Type player name... (autocomplete)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Type at least 3 characters and click Add Pick.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn" id="addLiveBtn"&gt;Add Pick&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span id="liveMsg" class="muted"&gt;&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="twocol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label&gt;By position</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;select id="livePos"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value=""&gt;Any&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option&gt;QB&lt;/option&gt;&lt;option&gt;RB&lt;/option&gt;&lt;option&gt;WR&lt;/option&gt;&lt;option&gt;TE&lt;/option&gt;&lt;option&gt;K&lt;/option&gt;&lt;option&gt;DST&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label&gt;By team</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;select id="liveTeam"&gt;&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label&gt;Select player</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;select id="livePlayer"&gt;&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small class="helper"&gt;Use the filters above to narrow the dropdown.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label&gt;Team slot #</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;input id="teamIdx" type="number" min="1" value="1" style="max-width:120px" aria-describedby="teamIdxHelp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn" id="addLiveSelBtn"&gt;Add Selected&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;small id="teamIdxHelp" class="helper"&gt;Optional. Track which opposing team drafted the player.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;h2&gt;Live Picks&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="tip"&gt;Your running draft log. Undo removes the last entry for that player.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;table id="liveTable"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;#&lt;/th&gt;&lt;th&gt;Player&lt;/th&gt;&lt;th&gt;Team&lt;/th&gt;&lt;th&gt;Pos&lt;/th&gt;&lt;th&gt;Bye&lt;/th&gt;&lt;th&gt;Overall Pick&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tbody&gt;&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;h3&gt;Clock&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="tip"&gt;Shows where you are in the draft and how many picks until you are up.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="kpi"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;&lt;div class="muted"&gt;Current round&lt;/div&gt;&lt;div id="curRound" style="font-size:20px;font-weight:700"&gt;1&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;&lt;div class="muted"&gt;Overall pick&lt;/div&gt;&lt;div id="curPick" style="font-size:20px;font-weight:700"&gt;1&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;&lt;div class="muted"&gt;Time to my next pick&lt;/div&gt;&lt;div id="etaNext" style="font-size:20px;font-weight:700"&gt;-&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Best Next Pick&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;Top choice right now based on who is still available.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id="liveNext" class="panel"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Top Alternatives&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="tip"&gt;If the best option gets taken, consider these.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id="liveAlt" class="list"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id="alerts"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- RIGHT COLUMN --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="rightcol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="panel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;Search &amp; Filters&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="tip"&gt;Use these to browse the remaining player pool.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="twocol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Search</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;input id="filterSearch" placeholder="Name, team..."&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Position</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;select id="filterPos"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value=""&gt;All&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;option&gt;QB&lt;/option&gt;&lt;option&gt;RB&lt;/option&gt;&lt;option&gt;WR&lt;/option&gt;&lt;option&gt;TE&lt;/option&gt;&lt;option&gt;K&lt;/option&gt;&lt;option&gt;DST&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Team</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;select id="filterTeam"&gt;&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Tier</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;select id="filterTier"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value=""&gt;All&lt;/option&gt;&lt;option&gt;S&lt;/option&gt;&lt;option&gt;A&lt;/option&gt;&lt;option&gt;B&lt;/option&gt;&lt;option&gt;C&lt;/option&gt;&lt;option&gt;D&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Bye week</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;select id="filterBye"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value=""&gt;All&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;small class="helper"&gt;Tier is a letter grade for overall quality. Bye week is when a player does not play.&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="row" style="margin-top:6px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" id="filterBtn"&gt;Apply&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" id="clearFilterBtn"&gt;Clear&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="results" class="list" style="margin-top:8px"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="panel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;Position Scarcity&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="tip"&gt;Shows how many players remain at each position. Bars fill as the pool dries up.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="scarcity" id="scarcity"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;Remaining Roster Needs&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="tip"&gt;How many more starters you still need to fill.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="needs" class="chips"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;dialog id="how" style="max-width:720px;border:1px solid var(--border);border-radius:12px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2&gt;How this works&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;This assistant builds a prioritized list for your next picks and an end-to-end plan. It estimates availability using ADP and a bell curve approximation. It also boosts or reduces players based on roster needs, tier breaks, positional scarcity, and your strategy toggles.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;li&gt;Use &lt;strong&gt;Settings&lt;/strong&gt; to enter league, roster, and strategy. Each field has a short description.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;li&gt;Click &lt;strong&gt;Generate Plan&lt;/strong&gt; to see your next two rounds and full lineup plan.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;li&gt;Switch to &lt;strong&gt;Live Draft&lt;/strong&gt; to log picks. The board updates and alerts on tier drops and snipe risk.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;li&gt;Paste new data in the CSV box to replace the dataset. You can always reset to seed data.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="row" style="justify-content:flex-end"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn" id="howClose"&gt;Close&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/dialog&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="toast" class="toast" style="display:none"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Seed dataset (compact real + synthetic to reach 240+)</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">const seedTop = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Christian McCaffrey", team: "SF", position: "RB", byeWeek: 9, projectedPoints: 310, ADP: 1, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Justin Jefferson", team: "MIN", position: "WR", byeWeek: 6, projectedPoints: 295, ADP: 2, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Ja'Marr Chase", team: "CIN", position: "WR", byeWeek: 7, projectedPoints: 285, ADP: 3, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "CeeDee Lamb", team: "DAL", position: "WR", byeWeek: 7, projectedPoints: 280, ADP: 4, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Breece Hall", team: "NYJ", position: "RB", byeWeek: 10, projectedPoints: 270, ADP: 5, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Bijan Robinson", team: "ATL", position: "RB", byeWeek: 12, projectedPoints: 265, ADP: 6, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Tyreek Hill", team: "MIA", position: "WR", byeWeek: 6, projectedPoints: 300, ADP: 7, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Amon-Ra St. Brown", team: "DET", position: "WR", byeWeek: 5, projectedPoints: 275, ADP: 8, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "A.J. Brown", team: "PHI", position: "WR", byeWeek: 10, projectedPoints: 268, ADP: 9, tier: "S" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Jalen Hurts", team: "PHI", position: "QB", byeWeek: 10, projectedPoints: 380, ADP: 20, tier: "A" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Josh Allen", team: "BUF", position: "QB", byeWeek: 12, projectedPoints: 385, ADP: 22, tier: "A" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Patrick Mahomes", team: "KC", position: "QB", byeWeek: 10, projectedPoints: 365, ADP: 25, tier: "A" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Travis Kelce", team: "KC", position: "TE", byeWeek: 10, projectedPoints: 235, ADP: 19, tier: "A" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Sam LaPorta", team: "DET", position: "TE", byeWeek: 5, projectedPoints: 205, ADP: 35, tier: "A" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Lamar Jackson", team: "BAL", position: "QB", byeWeek: 14, projectedPoints: 360, ADP: 30, tier: "A" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Puka Nacua", team: "LAR", position: "WR", byeWeek: 6, projectedPoints: 250, ADP: 15, tier: "A" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Aidan O'Connell", team: "LV", position: "QB", byeWeek: 13, projectedPoints: 255, ADP: 180, tier: "C" }</p>
+<p class="p1">];</p>
+<p class="p1">const teams = ["SF","MIN","CIN","DAL","NYJ","ATL","MIA","DET","PHI","BUF","KC","BAL","LAC","LAR","SEA","JAX","HOU","PIT","CHI","GB","NO","TB","TEN","IND","NE","NYG","LV","ARI","CLE","WAS","CAR","DEN"];</p>
+<p class="p1">const posDist = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{pos:"QB", count: 36, base: 290, drop: 2.6, tierCuts:[4,12,24]},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{pos:"RB", count: 80, base: 220, drop: 1.8, tierCuts:[8,24,48,70]},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{pos:"WR", count: 90, base: 210, drop: 1.7, tierCuts:[10,28,56,80]},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{pos:"TE", count: 30, base: 170, drop: 1.5, tierCuts:[3,10,18,26]},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{pos:"K",<span class="Apple-converted-space">  </span>count: 18, base: 140, drop: 1.2, tierCuts:[3,8,14]},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{pos:"DST",count: 18, base: 130, drop: 1.1, tierCuts:[3,8,14]},</p>
+<p class="p1">];</p>
+<p class="p1">function synthPlayers(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const out = [...seedTop];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let adp = 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for(const cfg of posDist){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for(let i=1;i&lt;=cfg.count;i++){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const name = `${cfg.pos} Player ${i}`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const team = teams[(i*7 + cfg.count) % teams.length];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const byeWeek = 5 + ((i + cfg.count) % 10);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const projectedPoints = Math.max(60, Math.round(cfg.base - cfg.drop*i + Math.random()*6));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>adp += 1;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const tier = i&lt;=cfg.tierCuts[0] ? "A" : i&lt;=cfg.tierCuts[1] ? "B" : i&lt;=cfg.tierCuts[2] ? "C" : (cfg.tierCuts[3] ? (i&lt;=cfg.tierCuts[3] ? "D":"E") : "D");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>out.push({ name, team, position: cfg.pos, byeWeek, projectedPoints, ADP: adp, tier });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>out.sort((a,b)=&gt;a.ADP-b.ADP).forEach((p,i)=&gt;p.ADP = i+1);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return out.slice(0, 250);</p>
+<p class="p1">}</p>
+<p class="p1">let players = synthPlayers();</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>State</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">const state = {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>players: JSON.parse(JSON.stringify(players)),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>removed: new Set(),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>locks: new Set(),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>picks: [],</p>
+<p class="p1"><span class="Apple-converted-space">  </span>settings: {},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>plan: { next: null, alts: [], lineup: [] },</p>
+<p class="p1">};</p>
+<p class="p1">const els = {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>tabs: document.querySelectorAll('.tabbtn'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>sections: {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>settings: document.getElementById('settings'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>generate: document.getElementById('generate'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>live: document.getElementById('live')</p>
+<p class="p1"><span class="Apple-converted-space">  </span>},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>numTeams: document.getElementById('numTeams'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>myPos: document.getElementById('myPos'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>draftType: document.getElementById('draftType'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>numRounds: document.getElementById('numRounds'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>rosterCfg: document.getElementById('rosterCfg'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>scoringPreset: document.getElementById('scoringPreset'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>sigma: document.getElementById('sigma'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>snipe: document.getElementById('snipeThresh'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>picksTable: document.getElementById('picksTable').querySelector('tbody'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>nextPick: document.getElementById('nextPick'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>topAlt: document.getElementById('topAlt'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>lineupPlan: document.getElementById('lineupPlan'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>filter: {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>search: document.getElementById('filterSearch'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>pos: document.getElementById('filterPos'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>team: document.getElementById('filterTeam'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tier: document.getElementById('filterTier'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>bye: document.getElementById('filterBye')</p>
+<p class="p1"><span class="Apple-converted-space">  </span>},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>results: document.getElementById('results'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>scarcity: document.getElementById('scarcity'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>needs: document.getElementById('needs'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>csvInput: document.getElementById('csvInput'),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>live: {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>search: document.getElementById('liveSearch'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>pos: document.getElementById('livePos'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>team: document.getElementById('liveTeam'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>player: document.getElementById('livePlayer'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>table: document.getElementById('liveTable').querySelector('tbody'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>curRound: document.getElementById('curRound'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>curPick: document.getElementById('curPick'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>eta: document.getElementById('etaNext'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg: document.getElementById('liveMsg'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>next: document.getElementById('liveNext'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>alt: document.getElementById('liveAlt'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>alerts: document.getElementById('alerts'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>teamIdx: document.getElementById('teamIdx')</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">};</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Utils</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function toast(msg, ms=2200){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=&gt;t.style.display='none', ms); }</p>
+<p class="p1">function approxNormCdf(x){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const sign = x &lt; 0 ? -1 : 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>x = Math.abs(x)/Math.SQRT2;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const t = 1/(1+0.3275911*x);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const erf = 1-((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return 0.5*(1+sign*erf);</p>
+<p class="p1">}</p>
+<p class="p1">function availabilityProb(ADP, pickNumber, sigma){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const z = (pickNumber - ADP)/sigma;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const c = approxNormCdf(z);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const p = Math.max(0, Math.min(1, 1 - c));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return p;</p>
+<p class="p1">}</p>
+<p class="p1">function computeMyPickNumbers(t, p, rounds, type="Snake"){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const arr=[];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for(let r=1;r&lt;=rounds;r++){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let overall;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(type==="Snake"){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>overall = (r%2===1) ? ((r-1)*t + p) : (r*t - p + 1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}else{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>overall = (r-1)*t + p;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>arr.push({round:r, overall, pick:p});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return arr;</p>
+<p class="p1">}</p>
+<p class="p1">function getSettings(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rosterInputs = els.rosterCfg.querySelectorAll('input');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const roster = {};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>rosterInputs.forEach(i=&gt;roster[i.dataset.pos] = parseInt(i.value||0));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const preset = els.scoringPreset.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const s = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>numTeams: parseInt(els.numTeams.value||12),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>myPos: Math.min(parseInt(els.myPos.value||1), parseInt(els.numTeams.value||12)),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>draftType: els.draftType.value,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>numRounds: parseInt(els.numRounds.value||16),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>roster,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>scoring: {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>preset,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>passYdsPerPt: parseFloat(document.getElementById('passYdsPerPt').value),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>passTD: parseFloat(document.getElementById('passTD').value),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>int: parseFloat(document.getElementById('int').value),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>rushYdsPerPt: parseFloat(document.getElementById('rushYdsPerPt').value),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>rushTD: parseFloat(document.getElementById('rushTD').value),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>recYdsPerPt: parseFloat(document.getElementById('recYdsPerPt').value),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>rec: parseFloat(document.getElementById('rec').value),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>fumble: parseFloat(document.getElementById('fumble').value)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>sigma: parseFloat(els.sigma.value||12),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>snipeThresh: parseFloat(els.snipe.value||30),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>strategies: Array.from(document.querySelectorAll('.strat:checked')).map(i=&gt;i.value),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>stratWeights: {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>floor: parseFloat(document.getElementById('floorRange').value||1),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>upside: parseFloat(document.getElementById('upsideRange').value||1),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>rookie: parseFloat(document.getElementById('rookieRange').value||1)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return s;</p>
+<p class="p1">}</p>
+<p class="p1">function countRosterTaken(plan){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const count = {QB:0,RB:0,WR:0,TE:0,FLEX:0,K:0,DST:0,BENCH:0};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>plan.forEach(p=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(count[p.position] !== undefined) count[p.position]++;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>else count.BENCH++;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return count;</p>
+<p class="p1">}</p>
+<p class="p1">function remainingNeeds(roster, taken){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const left = {};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for(const k of Object.keys(roster)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>left[k] = Math.max(0, roster[k] - (taken[k]||0));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return left;</p>
+<p class="p1">}</p>
+<p class="p1">function scarcityByPos(pool){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const byPos = {QB:0,RB:0,WR:0,TE:0,K:0,DST:0};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>pool.forEach(p=&gt;{ if(byPos[p.position]!==undefined) byPos[p.position]++; });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return byPos;</p>
+<p class="p1">}</p>
+<p class="p1">function normalize(val, min, max){ if(max===min) return 0; return (val-min)/(max-min); }</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Scoring</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function scorePlayer(player, ctx){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const { needs, sigma, nextOverallPick, strategies, stratWeights, plannedQBTeam } = ctx;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pool = ctx.pool;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const posCounts = scarcityByPos(pool);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const maxPts = Math.max(...pool.map(p=&gt;p.projectedPoints));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const minPts = Math.min(...pool.map(p=&gt;p.projectedPoints));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const base = normalize(player.projectedPoints, minPts, maxPts);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const avail = availabilityProb(player.ADP, nextOverallPick, sigma);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const want = (needs[player.position]||0) + (player.position==="RB"||player.position==="WR" ? (needs.FLEX||0)*0.5 : 0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const scarcity = 1 - normalize(posCounts[player.position], 0, Math.max(...Object.values(posCounts)));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const scarcityBoost = 0.15*scarcity + 0.25*Math.min(1, want);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const tierBonusMap = {S:0.25,A:0.18,B:0.12,C:0.07,D:0.03,E:0};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const tierBonus = tierBonusMap[player.tier] || 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>let strat = 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const isRookie = /Rookie|R\d/.test(player.name) || player.name.includes("(R)");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const top20 = player.projectedPoints &gt;= (minPts + 0.8*(maxPts-minPts));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const floorWeight = strategies.includes('floor') ? stratWeights.floor : 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const upsideWeight = strategies.includes('upside') ? stratWeights.upside : 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rookieWeight = strategies.includes('rookieTol') ? stratWeights.rookie : 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>strat += floorWeight * (player.tier==="S"||player.tier==="A" ? 0.12 : 0.05);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>strat += upsideWeight * (top20 ? 0.12 : 0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>strat += rookieWeight * (isRookie ? 0.06 : 0);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>let posSkew = 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(strategies.includes('zeroRB') &amp;&amp; (ctx.round&lt;=6)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(player.position==="WR"||player.position==="TE") posSkew += 0.1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(player.position==="RB") posSkew -= 0.08;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(strategies.includes('heroRB') &amp;&amp; (ctx.round&lt;=3)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(player.position==="RB") posSkew += 0.1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(strategies.includes('lateQB') &amp;&amp; (ctx.round&lt;=7)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(player.position==="QB") posSkew -= 0.08;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(strategies.includes('balanced')) posSkew += 0.02;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>let stackBoost = 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(strategies.includes('stack') &amp;&amp; plannedQBTeam &amp;&amp; (player.position==="WR"||player.position==="TE")){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(player.team===plannedQBTeam) stackBoost += 0.08;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>let score = base + scarcityBoost + tierBonus + strat + posSkew + stackBoost;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>score = score * (0.7 + 0.3*avail);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const info = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>base: base.toFixed(3),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>scarcityBoost: scarcityBoost.toFixed(3),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tierBonus: tierBonus.toFixed(3),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>strat: strat.toFixed(3),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>posSkew: posSkew.toFixed(3),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>stack: stackBoost.toFixed(3),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>avail: avail.toFixed(3),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>total: score.toFixed(3)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return { score, avail, info };</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Recommendations and Plan</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function recommendNextPicks(pool, ctx){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const scored = [];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for(const p of pool){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const s = scorePlayer(p, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>scored.push({...p, _score:s.score, _avail:s.avail, _info:s.info});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>scored.sort((a,b)=&gt;b._score - a._score);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return scored;</p>
+<p class="p1">}</p>
+<p class="p1">function generateLineupPlan(pool, ctx){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const roster = ctx.roster;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const counts = {QB:0,RB:0,WR:0,TE:0,K:0,DST:0,BENCH:0};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const picks = [];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const maxPicks = ctx.numRounds;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>for(let r=1;r&lt;=maxPicks;r++){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const nextOverallPick = ctx.myPicks[r-1]?.overall ?? ((r-1)*ctx.numTeams + ctx.myPos);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const needs = remainingNeeds(roster, counts);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const plannedQBTeam = [...state.locks].map(n=&gt;state.players.find(p=&gt;p.name===n)).find(p=&gt;p?.position==="QB")?.team;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const rec = recommendNextPicks(pool.filter(x=&gt;!state.locks.has(x.name)||true), {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>pool, needs, sigma:ctx.sigma, round:r, nextOverallPick, strategies:ctx.strategies, stratWeights:ctx.stratWeights, plannedQBTeam,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>roster, numTeams:ctx.numTeams, myPos:ctx.myPos, numRounds:ctx.numRounds, myPicks:ctx.myPicks</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pick = rec.find(p=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(needs[p.position]&gt;0) return true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(p.position==="RB"||p.position==="WR"||p.position==="TE"){</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(needs.FLEX&gt;0) return true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return counts.BENCH &lt; roster.BENCH;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(!pick) break;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>picks.push({...pick, rationale:`Score ${pick._score.toFixed(2)}, avail ${(pick._avail*100|0)}%`});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(remainingNeeds(roster, counts)[pick.position]&gt;0) counts[pick.position]++; else if((pick.position==="RB"||pick.position==="WR"||pick.position==="TE") &amp;&amp; remainingNeeds(roster, counts).FLEX&gt;0) counts.FLEX++; else counts.BENCH++;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const idx = pool.findIndex(x=&gt;x.name===pick.name);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(idx&gt;=0) pool.splice(idx,1);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return picks;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Live Draft</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function applyLivePick(name, teamIdx=1){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const p = state.players.find(x=&gt;x.name.toLowerCase()===name.toLowerCase());</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!p){ toast("Player not found"); return false; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(state.removed.has(p.name)) { toast("Already drafted"); return false; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.removed.add(p.name);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const overall = state.picks.length + 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.picks.push({...p, overall, teamIdx});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderLive();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>recomputeAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return true;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Persistence</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function saveState(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const payload = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>players: state.players,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>removed: Array.from(state.removed),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>locks: Array.from(state.locks),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>picks: state.picks,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>settings: getSettings(),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>plan: state.plan</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>localStorage.setItem('ff_draft_state_v1', JSON.stringify(payload));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>toast("Saved");</p>
+<p class="p1">}</p>
+<p class="p1">function loadState(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const raw = localStorage.getItem('ff_draft_state_v1');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!raw){ toast("Nothing saved yet"); return; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>try{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const data = JSON.parse(raw);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.players = data.players;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.removed = new Set(data.removed||[]);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.locks = new Set(data.locks||[]);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.picks = data.picks||[];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.plan = data.plan||{};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>toast("Loaded");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>recomputeAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}catch(e){ toast("Load failed"); }</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>CSV Import / Export</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function parseCSV(text){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const lines = text.trim().split(/\r?\n/);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!lines.length) throw new Error("Empty CSV");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const header = lines[0].split(',').map(s=&gt;s.trim());</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const expect = ["name","team","position","byeWeek","projectedPoints","ADP","tier"];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const miss = expect.filter(k=&gt;!header.includes(k));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(miss.length) throw new Error("Missing columns: "+miss.join(', '));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const idx = Object.fromEntries(header.map((h,i)=&gt;[h,i]));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const out = [];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for(let r=1;r&lt;lines.length;r++){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const row = lines[r].split(',');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(row.length !== header.length) throw new Error(`Row ${r+1} has ${row.length} columns`);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const obj = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>name: row[idx.name].trim(),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>team: row[idx.team].trim(),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>position: row[idx.position].trim().toUpperCase(),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>byeWeek: parseInt(row[idx.byeWeek]),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>projectedPoints: parseFloat(row[idx.projectedPoints]),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>ADP: parseInt(row[idx.ADP]),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>tier: row[idx.tier].trim()</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(!obj.name || !obj.team || !/^(QB|RB|WR|TE|K|DST)$/.test(obj.position)) throw new Error(`Row ${r+1} invalid name/team/position`);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(Number.isNaN(obj.byeWeek) || Number.isNaN(obj.projectedPoints) || Number.isNaN(obj.ADP)) throw new Error(`Row ${r+1} invalid numbers`);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>out.push(obj);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>out.sort((a,b)=&gt;a.ADP-b.ADP).forEach((p,i)=&gt;p.ADP = i+1);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return out;</p>
+<p class="p1">}</p>
+<p class="p1">function exportPlayersCSV(list){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const header = "name,team,position,byeWeek,projectedPoints,ADP,tier";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rows = list.map(p=&gt;[p.name,p.team,p.position,p.byeWeek,p.projectedPoints,p.ADP,p.tier].join(','));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const blob = new Blob([header+"\n"+rows.join("\n")], {type:"text/csv"});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = URL.createObjectURL(blob);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const a = document.createElement('a'); a.href=url; a.download="players.csv"; a.click(); URL.revokeObjectURL(url);</p>
+<p class="p1">}</p>
+<p class="p1">function exportPlanJSON(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const blob = new Blob([JSON.stringify(state.plan, null, 2)], {type:"application/json"});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = URL.createObjectURL(blob);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const a = document.createElement('a'); a.href=url; a.download="plan.json"; a.click(); URL.revokeObjectURL(url);</p>
+<p class="p1">}</p>
+<p class="p1">function exportRecommendationsCSV(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const header = "name,team,position,byeWeek,ADP,projectedPoints,score,availability";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rows = (state.plan?.alts||[]).map(p=&gt;[p.name,p.team,p.position,p.byeWeek,p.ADP,p.projectedPoints,p._score.toFixed(3),(p._avail*100).toFixed(1)+"%"].join(','));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const blob = new Blob([header+"\n"+rows.join("\n")], {type:"text/csv"});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = URL.createObjectURL(blob);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const a = document.createElement('a'); a.href=url; a.download="recommendations.csv"; a.click(); URL.revokeObjectURL(url);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Rendering helpers</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function badge(text){ return `&lt;span class="badge"&gt;${text}&lt;/span&gt;`; }</p>
+<p class="p1">function probBar(p){ return `&lt;div class="probbar" title="Avail ${(p*100).toFixed(1)}%"&gt;&lt;span style="width:${(p*100).toFixed(1)}%"&gt;&lt;/span&gt;&lt;/div&gt;`; }</p>
+<p class="p1">function itemRow(p, ctx, lockable=true){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const posClass = `pos-${p.position}`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const info = p._info ? `&lt;details&gt;&lt;summary&gt;score info&lt;/summary&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="twocol"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;base: ${p._info.base}&lt;/div&gt;&lt;div&gt;scarcity: ${p._info.scarcityBoost}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;tier: ${p._info.tierBonus}&lt;/div&gt;&lt;div&gt;strategy: ${p._info.strat}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;posSkew: ${p._info.posSkew}&lt;/div&gt;&lt;div&gt;stack: ${p._info.stack}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;avail: ${p._info.avail}&lt;/div&gt;&lt;div&gt;&lt;b&gt;total: ${p._info.total}&lt;/b&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;&lt;/details&gt;` : '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const locked = state.locks.has(p.name);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return `&lt;div class="item ${locked?'hl':''}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="meta"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;strong&gt;${p.name}&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="chip ${posClass}"&gt;${p.position}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badges"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>${badge(p.team)}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>${badge("Tier "+p.tier)}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>${badge("Bye "+p.byeWeek)}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>${badge("ADP "+p.ADP)}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>${badge(p.projectedPoints+" pts")}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="margin-top:6px;display:grid;grid-template-columns:1fr 160px;gap:8px;align-items:center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>${probBar(p._avail ?? availabilityProb(p.ADP, ctx.nextOverallPick||1, ctx.sigma))}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style="text-align:right" class="muted"&gt;Score ${(p._score??0).toFixed(2)}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>${p.rationale ? `&lt;div class="muted" style="margin-top:6px"&gt;${p.rationale}&lt;/div&gt;`:''}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>${info}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="row" style="align-self:start"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>${lockable?`&lt;button class="btn sm lock" data-name="${p.name}"&gt;${locked?'Unlock':'Lock'}&lt;/button&gt;`:''}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn sm" data-addlive="${p.name}"&gt;Drafted&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;`;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Main recompute</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function recomputeAll(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pool = state.players.filter(p=&gt;!state.removed.has(p.name));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>fillDropdowns();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderFilterResults();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const s = getSettings();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.myPos.max = s.numTeams;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const myPicks = computeMyPickNumbers(s.numTeams, s.myPos, s.numRounds, s.draftType);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderPicksTable(myPicks);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const taken = countRosterTaken(state.plan?.lineup||[]);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const needs = remainingNeeds(s.roster, taken);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderScarcity(pool, needs);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const draftedCount = state.picks.length;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const currentOverall = draftedCount + 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const currentRound = Math.floor((currentOverall-1) / s.numTeams) + 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const myNextPick = myPicks.find(pk=&gt;pk.overall &gt;= currentOverall) || myPicks[myPicks.length-1];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const ctx = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>roster: s.roster, numTeams: s.numTeams, myPos: s.myPos, numRounds: s.numRounds,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>sigma: s.sigma, strategies: s.strategies, stratWeights: s.stratWeights,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>myPicks, nextOverallPick: myNextPick.overall, round: currentRound, pool,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>needs, plannedQBTeam: ([...state.locks].map(n=&gt;state.players.find(p=&gt;p.name===n)).find(p=&gt;p?.position==="QB")||{}).team</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rec = recommendNextPicks(pool, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.plan.next = rec[0];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.plan.alts = rec.slice(1, 11);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const plan = generateLineupPlan(pool.slice(), {...ctx});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.plan.lineup = plan;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderNext(rec[0], rec.slice(1,10), ctx);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderLineupPlan(plan);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderLiveMeta();</p>
+<p class="p1">}</p>
+<p class="p1">function renderPicksTable(myPicks){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.picksTable.innerHTML = myPicks.map(pk=&gt;`&lt;tr&gt;&lt;td&gt;${pk.round}&lt;/td&gt;&lt;td&gt;${pk.pick}&lt;/td&gt;&lt;td&gt;${pk.overall}&lt;/td&gt;&lt;/tr&gt;`).join('');</p>
+<p class="p1">}</p>
+<p class="p1">function renderNext(best, alts, ctx){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.nextPick.innerHTML = best ? itemRow(best, ctx) : `&lt;div class="muted"&gt;No candidates&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.topAlt.innerHTML = alts.map(p=&gt;itemRow(p, ctx)).join('') + `&lt;div class="row"&gt;&lt;button class="btn" id="exportRecBtn"&gt;Export CSV of recommended picks&lt;/button&gt;&lt;/div&gt;`;</p>
+<p class="p1">}</p>
+<p class="p1">function renderLineupPlan(plan){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.lineupPlan.innerHTML = plan.map((p,i)=&gt; `&lt;div class="item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="meta"&gt;&lt;strong&gt;Round ${i+1} - ${p.name}&lt;/strong&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="badges" style="margin-top:4px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>${badge(p.position)} ${badge(p.team)} ${badge("Tier "+p.tier)} ${badge("Bye "+p.byeWeek)} ${badge("ADP "+p.ADP)}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="muted" style="margin-top:6px"&gt;${p.rationale||''}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn sm lock" data-name="${p.name}"&gt;${state.locks.has(p.name)?'Unlock':'Lock'}&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn sm" data-addlive="${p.name}"&gt;Drafted&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;`).join('');</p>
+<p class="p1">}</p>
+<p class="p1">function renderScarcity(pool, needs){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.needs.innerHTML = Object.entries(needs).filter(([k])=&gt;k!=="BENCH").map(([k,v])=&gt;`&lt;span class="chip"&gt;&lt;b&gt;${k}&lt;/b&gt; need ${v}&lt;/span&gt;`).join('');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const counts = scarcityByPos(pool);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const max = Math.max(...Object.values(counts));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const blocks = Object.entries(counts).map(([pos,c])=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const urg = needs[pos]&gt;0 ? 'color:var(--bad);font-weight:700' : 'color:var(--muted)';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pct = Math.round((1 - c/max)*100);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `&lt;div class="scar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="inline" style="justify-content:space-between"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;strong&gt;${pos}&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span style="${urg}"&gt;${needs[pos]||0} needed&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="bar" title="Scarcity ${pct}%"&gt;&lt;span style="width:${pct}%"&gt;&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;small class="muted"&gt;${c} remaining in pool&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).join('');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.scarcity.innerHTML = blocks;</p>
+<p class="p1">}</p>
+<p class="p1">function renderFilterResults(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const q = els.filter.search.value.trim().toLowerCase();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pos = els.filter.pos.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const team = els.filter.team.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const tier = els.filter.tier.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const bye = els.filter.bye.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const list = state.players.filter(p=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(state.removed.has(p.name)) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(q &amp;&amp; !(p.name.toLowerCase().includes(q)||p.team.toLowerCase().includes(q))) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(pos &amp;&amp; p.position!==pos) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(team &amp;&amp; p.team!==team) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(tier &amp;&amp; p.tier!==tier) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(bye &amp;&amp; String(p.byeWeek)!==String(bye)) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return true;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).slice(0, 50);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const s = getSettings();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const myPicks = computeMyPickNumbers(s.numTeams, s.myPos, s.numRounds, s.draftType);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const draftedCount = state.picks.length;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const nextPickOverall = (myPicks.find(pk=&gt;pk.overall &gt;= draftedCount+1) || myPicks[myPicks.length-1]).overall;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.results.innerHTML = list.map(p=&gt;itemRow({...p, _score:0, _avail:availabilityProb(p.ADP, nextPickOverall, s.sigma)}, {nextOverallPick:nextPickOverall, sigma:s.sigma})).join('');</p>
+<p class="p1">}</p>
+<p class="p1">function fillDropdowns(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const allTeams = Array.from(new Set(state.players.map(p=&gt;p.team))).sort();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const teamOpts = ['&lt;option value=""&gt;All&lt;/option&gt;'].concat(allTeams.map(t=&gt;`&lt;option&gt;${t}&lt;/option&gt;`)).join('');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.filter.team.innerHTML = teamOpts;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.team.innerHTML = ['&lt;option value=""&gt;Any&lt;/option&gt;'].concat(allTeams.map(t=&gt;`&lt;option&gt;${t}&lt;/option&gt;`)).join('');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.livePlayer.innerHTML = buildLiveSelect();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const byeSet = Array.from(new Set(state.players.map(p=&gt;p.byeWeek))).sort((a,b)=&gt;a-b);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.filter.bye.innerHTML = ['&lt;option value=""&gt;All&lt;/option&gt;'].concat(byeSet.map(b=&gt;`&lt;option&gt;${b}&lt;/option&gt;`)).join('');</p>
+<p class="p1">}</p>
+<p class="p1">function buildLiveSelect(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pos = els.live.pos.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const team = els.live.team.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pool = state.players.filter(p=&gt;!state.removed.has(p.name));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const list = pool.filter(p=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(pos &amp;&amp; p.position!==pos) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(team &amp;&amp; p.team!==team) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return true;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).slice(0, 200);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return list.map(p=&gt;`&lt;option&gt;${p.name} — ${p.team} ${p.position}&lt;/option&gt;`).join('');</p>
+<p class="p1">}</p>
+<p class="p1">function renderLive(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.table.innerHTML = state.picks.map((p,i)=&gt;`&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${p.name}&lt;/td&gt;&lt;td&gt;${p.team}&lt;/td&gt;&lt;td&gt;${p.position}&lt;/td&gt;&lt;td&gt;${p.byeWeek}&lt;/td&gt;&lt;td&gt;${p.overall}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;td&gt;&lt;button class="btn sm" data-undo="${p.name}"&gt;Undo&lt;/button&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/tr&gt;`).join('');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.player.innerHTML = buildLiveSelect();</p>
+<p class="p1">}</p>
+<p class="p1">function renderLiveMeta(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const s = getSettings();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const draftedCount = state.picks.length;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const curOverall = draftedCount + 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const curRound = Math.floor((curOverall-1)/s.numTeams)+1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const myPicks = computeMyPickNumbers(s.numTeams, s.myPos, s.numRounds, s.draftType);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const myNext = myPicks.find(pk=&gt;pk.overall &gt;= curOverall) || myPicks[myPicks.length-1];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const delta = myNext.overall - draftedCount;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.curRound.textContent = curRound;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.curPick.textContent = curOverall;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.eta.textContent = delta&gt;0 ? `${delta} picks` : "Now";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pool = state.players.filter(p=&gt;!state.removed.has(p.name));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const needs = remainingNeeds(s.roster, countRosterTaken(state.plan?.lineup||[]));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const ctx = { roster:s.roster, numTeams:s.numTeams, myPos:s.myPos, numRounds:s.numRounds,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>sigma:s.sigma, strategies:s.strategies, stratWeights:s.stratWeights,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>myPicks, nextOverallPick: myNext.overall, round: curRound, pool, needs,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>plannedQBTeam: ([...state.locks].map(n=&gt;state.players.find(p=&gt;p.name===n)).find(p=&gt;p?.position==="QB")||{}).team</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rec = recommendNextPicks(pool, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.next.innerHTML = rec[0] ? itemRow(rec[0], ctx) : `&lt;div class="muted"&gt;No candidates&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.alt.innerHTML = rec.slice(1,7).map(p=&gt;itemRow(p, ctx)).join('');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const snipe = s.snipeThresh/100;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const risk = rec.filter(p=&gt;p._avail &lt; snipe).slice(0,3);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const tiersLeft = {};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>pool.forEach(p=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tiersLeft[p.position] = tiersLeft[p.position] || {};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tiersLeft[p.position][p.tier] = (tiersLeft[p.position][p.tier]||0)+1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const tierAlerts = Object.entries(tiersLeft).flatMap(([pos,tiers])=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return Object.entries(tiers).filter(([tier,count])=&gt;count&lt;=2 &amp;&amp; ["S","A"].includes(tier)).map(([tier,count])=&gt;`&lt;div class="alert"&gt;Tier ${tier} at ${pos} almost gone - ${count} left&lt;/div&gt;`);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).join('');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.live.alerts.innerHTML = (risk.length?`&lt;div class="alert"&gt;Snipe risk: ${risk.map(r=&gt;r.name).join(', ')}&lt;/div&gt;`:'') + tierAlerts;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Events</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">document.getElementById('generateBtn').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>recomputeAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>switchTab('generate');</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('exportJsonBtn').addEventListener('click', exportPlanJSON);</p>
+<p class="p1">document.addEventListener('click', e=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const btn = e.target.closest('.lock');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(btn){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const name = btn.dataset.name;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(state.locks.has(name)) state.locks.delete(name); else state.locks.add(name);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>btn.textContent = state.locks.has(name)?'Unlock':'Lock';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>recomputeAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const add = e.target.closest('[data-addlive]');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(add){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const name = add.dataset.addlive;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(applyLivePick(name, parseInt(els.live.teamIdx.value||1))) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>toast(`Drafted ${name}`);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const undo = e.target.closest('[data-undo]');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(undo){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const name = undo.dataset.undo;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const idx = state.picks.findIndex(p=&gt;p.name===name);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(idx&gt;=0){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>state.picks.splice(idx,1);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>state.removed.delete(name);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>renderLive();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>recomputeAll();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(e.target.id==='exportRecBtn') exportRecommendationsCSV();</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('filterBtn').addEventListener('click', renderFilterResults);</p>
+<p class="p1">document.getElementById('clearFilterBtn').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.filter.search.value=''; els.filter.pos.value=''; els.filter.team.value=''; els.filter.tier.value=''; els.filter.bye.value='';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderFilterResults();</p>
+<p class="p1">});</p>
+<p class="p1">['numTeams','myPos','draftType','numRounds','sigma','snipeThresh','scoringPreset'].forEach(id=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById(id)?.addEventListener('change', recomputeAll);</p>
+<p class="p1">});</p>
+<p class="p1">els.rosterCfg.addEventListener('change', recomputeAll);</p>
+<p class="p1">document.querySelectorAll('.strat, #floorRange, #upsideRange, #rookieRange').forEach(x=&gt;x.addEventListener('change', recomputeAll));</p>
+<p class="p1">els.filter.search.addEventListener('input', ()=&gt;{ renderFilterResults(); });</p>
+<p class="p1">['livePos','liveTeam'].forEach(id=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById(id).addEventListener('change', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>els.live.player.innerHTML = buildLiveSelect();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('addLiveBtn').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const q = els.live.search.value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!q){ toast("Type a name"); return; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(applyLivePick(q, parseInt(els.live.teamIdx.value||1))){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>els.live.search.value='';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>els.live.msg.textContent = "Not found or already drafted";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(()=&gt;els.live.msg.textContent='', 2000);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('addLiveSelBtn').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const opt = els.live.player.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const name = opt.split(' — ')[0];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>applyLivePick(name, parseInt(els.live.teamIdx.value||1));</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('saveBtn').addEventListener('click', saveState);</p>
+<p class="p1">document.getElementById('loadBtn').addEventListener('click', loadState);</p>
+<p class="p1">document.getElementById('hardResetBtn').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(confirm("Clear all picks and changes")) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.players = synthPlayers();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.removed = new Set();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.locks = new Set();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.picks = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.plan = { next:null, alts:[], lineup:[] };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>recomputeAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('resetSeedBtn').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.players = synthPlayers();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.removed = new Set();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>toast("Reset to seed data");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>recomputeAll();</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('importCsvBtn').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>try{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const text = els.csvInput.value;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const list = parseCSV(text);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.players = list;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.removed = new Set();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.locks = new Set();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>state.picks = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>toast(`Imported ${list.length} players`);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>recomputeAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}catch(e){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>toast("CSV error: "+e.message, 4000);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('exportCsvSeedBtn').addEventListener('click', ()=&gt;exportPlayersCSV(state.players));</p>
+<p class="p1">function switchTab(id){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>els.tabs.forEach(b=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const active = b.dataset.tab===id;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>b.classList.toggle('active', active);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>b.setAttribute('aria-selected', active?'true':'false');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>Object.entries(els.sections).forEach(([k,sec])=&gt;sec.classList.toggle('active', k===id));</p>
+<p class="p1">}</p>
+<p class="p1">els.tabs.forEach(b=&gt;b.addEventListener('click', ()=&gt;switchTab(b.dataset.tab)));</p>
+<p class="p2"><br></p>
+<p class="p1">document.getElementById('howBtn').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('how').showModal();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('howBtn').setAttribute('aria-expanded','true');</p>
+<p class="p1">});</p>
+<p class="p1">document.getElementById('howClose').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('how').close();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('howBtn').setAttribute('aria-expanded','false');</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">/* Keyboard focus for accessibility */</p>
+<p class="p1">document.addEventListener('keydown', e=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(e.key==='/' &amp;&amp; document.activeElement.tagName!=='INPUT' &amp;&amp; document.activeElement.tagName!=='TEXTAREA'){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>e.preventDefault(); els.filter.search.focus();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">/* =========================</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Init</p>
+<p class="p1"><span class="Apple-converted-space">   </span>========================= */</p>
+<p class="p1">function init(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>fillDropdowns();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>recomputeAll();</p>
+<p class="p1">}</p>
+<p class="p1">init();</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
